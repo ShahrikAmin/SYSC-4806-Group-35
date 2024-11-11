@@ -1,3 +1,8 @@
+package com.group35.project;
+
+import com.group35.project.Book.Book;
+import com.group35.project.Inventory.Inventory;
+
 public class StoreOwner {
     private Inventory inventory;
 
@@ -25,9 +30,9 @@ public class StoreOwner {
         return removed;
     }
 
-    public void displayInventory() {
-        inventory.displayBooks();
-    }
+//    public void displayInventory() {
+//        inventory.printBooks();
+//    }
 
     public boolean editBook(int index, String newIsbn, String newTitle, String newAuthor, String newPublisher, String newDescription, Double newPrice, String newPictureUrl) {
         Book book = inventory.getBook(index);

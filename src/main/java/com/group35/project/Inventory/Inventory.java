@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.awt.print.Book;
+import com.group35.project.Book.Book;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,6 @@ import jakarta.persistence.*;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
 
 @Entity
 
@@ -25,11 +24,10 @@ public class Inventory implements Serializable {
     private long id;
     private int size;
 
-    @OneToMany
-    private List<Book> bookInventory = new ArrayList<>(Book);
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Book> bookInventory = new ArrayList<Book>();
 
-    public Inventory(long id) {
-        this.id = id;
+    public Inventory() {
         this.size = 0;
     }
 
@@ -41,6 +39,16 @@ public class Inventory implements Serializable {
 
     public void removeBook(Book book) {bookInventory.remove(book);
     this.size--;}
+
+    public boolean removeBook(String isbn) {
+        for (Book book : bookInventory){
+            if(book.getIsbn() == isbn) {
+                bookInventory.remove(book);
+                return true;
+            }
+        }
+        return false;
+    }
 
     public void printBooks() {
         for (Book book : bookInventory) {
@@ -67,5 +75,35 @@ public class Inventory implements Serializable {
     public void removeBookWithISBN(String isbn) {
         bookInventory.removeIf(book -> book.getIsbn().equals(isbn));
         this.size = bookInventory.size();
+    }
+
+
+    public com.group35.project.Book.Book getBook(int index) {
+        return bookInventory.get(index);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public int getSize() {
+        return bookInventory.size();
+    }
+
+    public List<Book> getBooks() {
+        return bookInventory;
+    }
+
+    public void setSize(int size){
+        this.size = size;
+    }
+
+    public String toString() {
+        String output = "";
+        for (Book b : bookInventory) {
+            output += "Isbn:" + b.getIsbn() + " Title: " +  b.getTitle() + " Author: " + b.getAuthor() + "\n";
+        }
+
+        return output;
     }
 }

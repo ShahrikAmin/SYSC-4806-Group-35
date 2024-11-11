@@ -9,5 +9,4 @@ public interface InventoryRepository extends CrudRepository<Inventory, Long> {
     List<Inventory> findBySize(int size);
     Inventory findById(long id);
 
-
 }

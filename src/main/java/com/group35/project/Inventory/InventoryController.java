@@ -1,5 +1,6 @@
 package com.group35.project.Inventory;
 
+import com.group35.project.Book.Book;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

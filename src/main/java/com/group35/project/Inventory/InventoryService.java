@@ -3,7 +3,7 @@ package com.group35.project.Inventory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Book;
+import com.group35.project.Book.Book;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class InventoryService {
     public List<Inventory> getAllInventory() {
         List<Inventory> inventory = new ArrayList<>();
         for (Inventory inv: repository.findAll()){
-            Inventory i = new Inventory(inv.getId());
+            Inventory i = new Inventory();
             if(inv.getSize() != 0){
                 for (Book b : inv.getBooks()){
                     i.addBook(b);
