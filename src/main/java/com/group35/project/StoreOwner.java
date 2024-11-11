@@ -30,9 +30,9 @@ public class StoreOwner {
         return removed;
     }
 
-//    public void displayInventory() {
-//        inventory.printBooks();
-//    }
+    public Inventory getInventory() {
+        return inventory;
+    }
 
     public boolean editBook(int index, String newIsbn, String newTitle, String newAuthor, String newPublisher, String newDescription, Double newPrice, String newPictureUrl) {
         Book book = inventory.getBook(index);
