@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventory Page</title>
+  <style>
+    /* Basic styles */
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+    .navbar { background-color: #333; overflow: hidden; }
+    .navbar a { float: left; color: white; text-align: center; padding: 14px 20px; text-decoration: none; }
+    .navbar a:hover { background-color: #555; }
+    .content { padding: 20px; }
+    .inventory-list { margin-top: 20px; }
+    .book-item { padding: 10px; border-bottom: 1px solid #ccc; }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<div class="navbar">
+  <a th:href="@{/seller}">Seller Page</a>
+  <a th:href="@{/inventory}" class="active">Inventory</a>
+</div>
+
+<!-- Inventory Content -->
+<div id="inventory-page" class="content">
+  <h2>Book Inventory</h2>
+  <div class="inventory-list" id="inventory-list">
+    <!-- Iterate over books and display them -->
+    <div th:each="book : ${books}" class="book-item">
+      <strong>ID:</strong> <span th:text="${book.id}"></span> <br>
+      <strong>Title:</strong> <span th:text="${book.title}"></span> <br>
+      <strong>Author:</strong> <span th:text="${book.author}"></span>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
