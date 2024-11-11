@@ -53,11 +53,15 @@ public class ThymeleafController {
                                      @RequestParam("price") Double price,
                                      @RequestParam("pictureUrl") String pictureUrl,
                                      Model model) {
-
+        if (inventoryRepository.findById(1L).hasBook(bookId)){
+            inventoryService.removeBookWithISBN(bookId,1L);
+            model.addAttribute("message", "Book edited successfully");
+        }else {
+            model.addAttribute("message", "Book added successfully");
+        }
         Book book = new Book(bookId, title, author, publisher, description, price, pictureUrl);
         bookService.createBook(book);  // Save book in BookService
         inventoryService.addBook(book, 1L);  // Add to inventory (assuming inventoryId = 1)
-        model.addAttribute("message", "Book added successfully");
         return "redirect:/thymeleaf/books";
     }
 

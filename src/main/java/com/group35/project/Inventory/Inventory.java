@@ -77,6 +77,15 @@ public class Inventory implements Serializable {
         this.size = bookInventory.size();
     }
 
+    public boolean hasBook(String isbn){
+        for (Book b : bookInventory){
+            if (b.getIsbn().equals(isbn)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public com.group35.project.Book.Book getBook(int index) {
         return bookInventory.get(index);
