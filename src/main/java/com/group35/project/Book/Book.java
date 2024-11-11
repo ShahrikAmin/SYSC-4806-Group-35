@@ -1,4 +1,5 @@
 package com.group35.project.Book;
+import com.group35.project.Inventory.Inventory;
 import jakarta.persistence.*;
 
 /***
@@ -114,5 +115,7 @@ public class Book {
                 ", pictureUrl='" + pictureUrl + '\'' +
                 '}';
     }
+
+
 
 }
