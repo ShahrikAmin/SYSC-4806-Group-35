@@ -1,9 +1,9 @@
-package com.group35.project;
 import static org.junit.Assert.assertEquals;
+
+import com.group35.project.StoreOwner;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.group35.project.Book.Book;
 import com.group35.project.Inventory.Inventory;
 
 public class StoreOwnerTests {
@@ -11,7 +11,6 @@ public class StoreOwnerTests {
 
     @Before
     public void init(){
-        Book b1 = new Book("111", "Title", "author", "publisher", "description", 1.00, "Url");
         Inventory i = new Inventory();
         s1 = new StoreOwner(i);
     }
