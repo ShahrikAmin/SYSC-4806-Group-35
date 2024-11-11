@@ -19,19 +19,24 @@
 
 <!-- Navbar -->
 <div class="navbar">
-  <a th:href="@{/seller}">Seller Page</a>
-  <a th:href="@{/inventory}" class="active">Inventory</a>
+  <a th:href="@{/thymeleaf/seller}">Seller Page</a>
+  <a th:href="@{/thymeleaf/books}" class="active">Inventory</a>
 </div>
 
 <!-- Inventory Content -->
 <div id="inventory-page" class="content">
   <h2>Book Inventory</h2>
   <div class="inventory-list" id="inventory-list">
-    <!-- Iterate over books and display them -->
-    <div th:each="book : ${books}" class="book-item">
-      <strong>ID:</strong> <span th:text="${book.id}"></span> <br>
+    <!-- Iterate over inventory and display books -->
+    <div th:each="book : ${inventory.getBooks()}" class="book-item">
+      <strong>Inventory ID:</strong> <span th:text="${inventory.id}"></span> <br>
+      <strong>ISBN:</strong> <span th:text="${book.isbn}"></span> <br>
       <strong>Title:</strong> <span th:text="${book.title}"></span> <br>
-      <strong>Author:</strong> <span th:text="${book.author}"></span>
+      <strong>Author:</strong> <span th:text="${book.author}"></span> <br>
+      <strong>Publisher:</strong> <span th:text="${book.publisher}"></span> <br>
+      <strong>Description:</strong> <span th:text="${book.description}"></span> <br>
+      <strong>Price:</strong> $<span th:text="${book.price}"></span> <br>
+      <strong>Picture:</strong> <img th:src="${book.pictureUrl}" alt="Book Image" width="100"> <br>
     </div>
   </div>
 </div>
