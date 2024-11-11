@@ -63,9 +63,9 @@ public class ThymeleafController {
 
     // Handle removing a book from the inventory
     @PostMapping("/seller/removeBook")
-    public String removeBookFromInventory(@RequestParam("isbn") Long bookId, Model model) {
-        inventoryService.removeBook(1L, bookId);  // Remove from inventory (assuming inventoryId = 1)
+    public String removeBookFromInventory(@RequestParam("isbn") String isbn, Model model) {
+        inventoryService.removeBookWithISBN(isbn,1L);  // Remove from inventory (assuming inventoryId = 1)
         model.addAttribute("message", "Book removed successfully");
-        return "redirect:/books";
+        return "redirect:/thymeleaf/books";
     }
 }
