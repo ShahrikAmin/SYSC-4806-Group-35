@@ -49,7 +49,7 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'bookstore-app'
-          slot-name: 'Production'
+          slot-name: ''
           package: '*.jar'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_013B8B1BA24F4A698F615AB1BD48D1C9 }}
           
