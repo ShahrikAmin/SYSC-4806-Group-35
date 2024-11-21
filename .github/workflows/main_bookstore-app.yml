@@ -14,17 +14,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout the code
       - uses: actions/checkout@v4
 
+      # Set up Java environment
       - name: Set up Java version
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'microsoft'
 
+      # Build the application with Maven
       - name: Build with Maven
         run: mvn clean install
 
+      # Debug: Check contents of the target directory
+      - name: Check target directory
+        run: |
+          echo "Checking target directory contents:"
+          ls -alh ${{ github.workspace }}/target
+
+      # Upload artifact for deployment
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
@@ -36,26 +46,23 @@ jobs:
     needs: build
     environment:
       name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-      
+
     steps:
+      # Download the artifact from the build job
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: java-app
 
-      - name: List uploaded artifacts
-        run: ls -alh ${{ github.workspace }}/target
-      
-      - name: Debug deployment directory
-        run: curl -X GET -u "$bookstore-app:KPFxdJ6qWl2HxSaBnuNTfolie7H9fnSM0Gyvk9smZ3aXbKkM7sfnnBdc7gdi" \
-             https://bookstore-app-akbhcsbrexdpdmf8.scm.canadacentral-01.azurewebsites.net/api/deployments/latest
-      
+      # Debug: Check contents of the downloaded artifact
+      - name: List downloaded artifacts
+        run: ls -alh ${{ github.workspace }}
+
+      # Deploy to Azure Web App
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'bookstore-app-akbhcsbrexdpdmf8'
+          app-name: 'bookstore-app-akbhcsbrexdpdmf8' # Ensure the app name is correct
           package: '*.jar'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_013B8B1BA24F4A698F615AB1BD48D1C9 }}
-          
