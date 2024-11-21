@@ -43,6 +43,13 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: java-app
+
+      - name: List uploaded artifacts
+        run: ls -alh ${{ github.workspace }}/target
+      
+      - name: Debug deployment directory
+        run: curl -X GET -u "$bookstore-app:KPFxdJ6qWl2HxSaBnuNTfolie7H9fnSM0Gyvk9smZ3aXbKkM7sfnnBdc7gdi" \
+             https://bookstore-app-akbhcsbrexdpdmf8.scm.canadacentral-01.azurewebsites.net/api/deployments/latest
       
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
