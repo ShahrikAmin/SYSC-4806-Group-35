@@ -66,3 +66,10 @@ jobs:
           app-name: 'bookstore-app' # Ensure the app name is correct
           package: '*.jar'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_013B8B1BA24F4A698F615AB1BD48D1C9 }}
+
+      - name: List deployed files
+        run: curl -u "$bookstore-app:KPFxdJ6qWl2HxSaBnuNTfolie7H9fnSM0Gyvk9smZ3aXbKkM7sfnnBdc7gdi" \
+         https://bookstore-app.scm.canadacentral-01.azurewebsites.net/api/command \
+         -d '{"command":"ls /home/site/wwwroot"}' \
+         -H "Content-Type: application/json"
+
