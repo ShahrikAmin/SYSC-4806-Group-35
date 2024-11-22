@@ -12,9 +12,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Controller
 @RequestMapping("/thymeleaf")
 public class ThymeleafController {
+    private static final Logger logger = LoggerFactory.getLogger(ThymeleafController.class);
 
     private final InventoryService inventoryService;
     private final BookService bookService;
@@ -29,12 +33,90 @@ public class ThymeleafController {
 
     // Display inventory page with the list of books in inventory
     @GetMapping("/books")
-    public String showInventory(Model model) {
-        //List<Inventory> inventoryList = inventoryService.getAllInventory();
-        Inventory inventory = inventoryRepository.findById(1L);
-        model.addAttribute("inventory", inventory);
+//    public String showInventory(Model model) {
+//        //List<Inventory> inventoryList = inventoryService.getAllInventory();
+//        Inventory inventory = inventoryRepository.findById(1L);
+//        model.addAttribute("inventory", inventory);
+//        return "inventory-view";
+//    }
+
+//    public String showInventory(@RequestParam(value = "isbn", required = false) String isbn,
+//                                Model model) {
+//        List<Book> books;
+//        String searchType = null;
+//        Inventory inventory = inventoryRepository.findById(1L);
+//
+//        if (isbn != null && !isbn.isEmpty()) {
+//            try {
+//                Book book = bookService.findBookByIsbn(isbn);
+//                books = List.of(book);
+//                searchType = "ISBN: " + isbn;
+//            } catch (Exception e) {
+//                books = List.of();
+//                searchType = "No results for ISBN: " + isbn;
+//            }
+//        } else {
+//            if (inventory == null) {
+//                books = List.of();
+//                searchType = "No inventory found!";
+//            } else {
+//                books = inventory.getBooks();
+//            }
+//        }
+//
+//        model.addAttribute("inventory", inventory);
+//        model.addAttribute("books", books);
+//        model.addAttribute("searchType", searchType);
+//        return "inventory-view";
+//    }
+
+    public String showInventory(@RequestParam(value = "isbn", required = false) String isbn,
+                                @RequestParam(value = "title", required = false) String title,
+                                Model model) {
+        logger.info("Search request received with ISBN: {} and Title: {}", isbn, title);
+
+        List<Book> books = List.of();
+        String searchType = null;
+
+        if (isbn != null && !isbn.isEmpty()) {
+            try {
+                Book book = bookService.findBookByIsbn(isbn);
+                books = List.of(book);
+                searchType = "ISBN: " + isbn;
+                logger.info("Book found for ISBN '{}': {}", isbn, book);
+            } catch (Exception e) {
+                searchType = "No results for ISBN: " + isbn;
+                logger.warn("No book found for ISBN: {}", isbn, e);
+            }
+        } else if (title != null && !title.isEmpty()) {
+            books = bookService.findBooksByTitle(title);
+            if (!books.isEmpty()) {
+                searchType = "Title: " + title;
+                logger.info("Books found for Title '{}': {}", title, books);
+            } else {
+                searchType = "No results for Title: " + title;
+                logger.warn("No books found for Title: {}", title);
+            }
+        } else {
+            Inventory inventory = inventoryRepository.findById(1L);
+            if (inventory != null) {
+                books = inventory.getBooks();
+                searchType = "All Books";
+                logger.info("Returning all books from inventory.");
+            } else {
+                searchType = "No inventory found!";
+                logger.warn("No inventory found.");
+            }
+        }
+
+        model.addAttribute("books", books);
+        model.addAttribute("searchType", searchType);
+
         return "inventory-view";
     }
+
+
+
 
     // Display seller page for adding and removing books
     @GetMapping("/seller")

@@ -56,6 +56,13 @@ public class AccessingDataJpaApplication {
                 log.info(title.toString());
             });
             log.info("");
+
+//            //fetch by Isbn
+//            Book book2 = repository.findByIsbn("23451");
+//            log.info("Book found with findByIsbn(23451):");
+//            log.info("--------------------------------");
+//            log.info(book2.toString());
+//            log.info("");
         };
     }
 

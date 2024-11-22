@@ -26,18 +26,45 @@
 <!-- Inventory Content -->
 <div id="inventory-page" class="content">
   <h2>Book Inventory</h2>
-  <div class="inventory-list" id="inventory-list">
-    <!-- Iterate over inventory and display books -->
-    <div th:each="book : ${inventory.getBooks()}" class="book-item">
-      <strong>Inventory ID:</strong> <span th:text="${inventory.id}"></span> <br>
-      <strong>ISBN:</strong> <span th:text="${book.isbn}"></span> <br>
-      <strong>Title:</strong> <span th:text="${book.title}"></span> <br>
-      <strong>Author:</strong> <span th:text="${book.author}"></span> <br>
-      <strong>Publisher:</strong> <span th:text="${book.publisher}"></span> <br>
-      <strong>Description:</strong> <span th:text="${book.description}"></span> <br>
-      <strong>Price:</strong> $<span th:text="${book.price}"></span> <br>
-      <strong>Picture:</strong> <img th:src="${book.pictureUrl}" alt="Book Image" width="100"> <br>
+
+  <!-- Search Form -->
+  <form action="#" th:action="@{/thymeleaf/books}" method="GET" style="margin-bottom: 20px;">
+    <h3>Search Books</h3>
+    <div class="form-group">
+      <label for="isbn">Search by ISBN:</label>
+      <input type="text" id="isbn" name="isbn" placeholder="Enter ISBN">
     </div>
+    <div class="form-group">
+      <label for="title">Search by Title:</label>
+      <input type="text" id="title" name="title" placeholder="Enter Title">
+    </div>
+    <button type="submit">Search</button>
+  </form>
+
+  <!-- Display Search Results -->
+  <div th:if="${books != null and books.isEmpty()} and ${searchType != null}">
+    <p>No books found for <span th:text="${searchType}"></span>.</p>
+  </div>
+
+  <!-- Display Book Inventory -->
+  <div th:if="${books != null and not books.isEmpty()}">
+    <h3>Search Results:</h3>
+    <div class="inventory-list" id="inventory-list">
+      <div th:each="book : ${books}" class="book-item">
+        <strong>ISBN:</strong> <span th:text="${book.isbn}"></span><br>
+        <strong>Title:</strong> <span th:text="${book.title}"></span><br>
+        <strong>Author:</strong> <span th:text="${book.author}"></span><br>
+        <strong>Publisher:</strong> <span th:text="${book.publisher}"></span><br>
+        <strong>Description:</strong> <span th:text="${book.description}"></span><br>
+        <strong>Price:</strong> $<span th:text="${book.price}"></span><br>
+        <strong>Picture:</strong> <img th:src="${book.pictureUrl}" alt="Book Image" width="100"><br>
+      </div>
+    </div>
+  </div>
+
+  <!-- Handle Empty Inventory -->
+  <div th:if="${books == null}">
+    <p>No inventory found!</p>
   </div>
 </div>
 

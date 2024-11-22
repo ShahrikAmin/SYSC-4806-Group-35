@@ -13,6 +13,7 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Automatically generate the ID
     private Long id;
 
+
     private String isbn;
     private String title;
     private String author;
