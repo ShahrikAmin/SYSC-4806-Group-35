@@ -19,8 +19,8 @@
 
 <!-- Navbar -->
 <div class="navbar">
-    <a th:href="@{/thymeleaf/seller}" class="active">Seller Page</a>
-    <a th:href="@{/thymeleaf/books}">Inventory</a>
+    <a th:href="@{/storeowner/home}" class="active">Seller Page</a>
+    <a th:href="@{/user/home}">Inventory</a>
 </div>
 
 <!-- Seller Page Content -->
@@ -28,7 +28,7 @@
     <h2>Seller Page - Manage Books</h2>
 
     <!-- Add Book Form -->
-    <form action="#" method="POST" th:action="@{/thymeleaf/seller/addBook}">
+    <form action="#" method="POST" th:action="@{/storeowner/addBook}">
         <h3>Add / Edit Book</h3>
         <div class="form-group">
             <label for="isbn">ISBN:</label>
@@ -62,7 +62,7 @@
     </form>
 
     <!-- Remove Book Form -->
-    <form action="#" method="POST" th:action="@{/thymeleaf/seller/removeBook}">
+    <form action="#" method="POST" th:action="@{/storeowner/removeBook}">
         <h3>Remove Book</h3>
         <div class="form-group">
             <label for="isbn">ISBN:</label>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <style>
+        /* Basic styles */
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        .navbar { background-color: #333; overflow: hidden; }
+        .navbar a { float: left; color: white; text-align: center; padding: 14px 20px; text-decoration: none; }
+        .navbar a:hover { background-color: #555; }
+        .content { padding: 20px; }
+        .inventory-list { margin-top: 20px; }
+        .book-item { padding: 10px; border-bottom: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <a th:href="@{/user/home}" class="active">Inventory</a>
+        <a th:href="@{/user/shopping-cart}">User Shopping Cart</a>
+    </div>
+  <h1>HELLO WORLD TO THE SHOPPING CART !!</h1>
+</body>
+</html>
