@@ -1,5 +1,6 @@
 package com.group35.project.Inventory;
 
+import com.group35.project.Book.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,16 +11,19 @@ import java.util.List;
 @Service
 public class InventoryService {
     private final InventoryRepository repository;
+    private final BookRepository bookRepository;
 
     @Autowired
-    public InventoryService(InventoryRepository repository) {this.repository = repository;}
-
+    public InventoryService(InventoryRepository repository, BookRepository bookRepository) {
+        this.repository = repository;
+        this.bookRepository = bookRepository;
+    }
     public List<Inventory> getAllInventory() {
         List<Inventory> inventory = new ArrayList<>();
         for (Inventory inv: repository.findAll()){
             Inventory i = new Inventory();
             if(inv.getSize() != 0){
-                for (Book b : inv.getBooks()){
+                for (Book b : inv.getAllBooks().values()){
                     i.addBook(b);
                 }
             }
@@ -44,6 +48,10 @@ public class InventoryService {
         Inventory inventory = repository.findById(inventoryId)
                 .orElseThrow(() -> new IllegalStateException("Inventory with id " + inventoryId + " does not exist"));
 
+
+        book = bookRepository.save(book);
+
+
         inventory.addBook(book);
         repository.save(inventory);
     }
@@ -53,17 +61,16 @@ public class InventoryService {
                 .orElseThrow(() -> new IllegalStateException("Inventory with id "
                         + inventoryId + " does not exist."));
 
-        inventory.removeBookWithId(BookId);
-
+        inventory.removeBook(BookId);
         repository.save(inventory);
     }
 
-    public void removeBookWithISBN(String isbn, Long inventoryId) {
+    public void removeBookByISBN(String isbn, Long inventoryId) {
         Inventory inventory = repository.findById(inventoryId)
                 .orElseThrow(() -> new IllegalStateException("Inventory with id "
                         + inventoryId + " does not exist."));
 
-        inventory.removeBookWithISBN(isbn);
+        inventory.removeBookByISBN(isbn);
         repository.save(inventory);
     }
 }

@@ -1,5 +1,6 @@
 package com.group35.project.Inventory;
 
+import com.group35.project.Book.BookRepository;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,8 +9,12 @@ import lombok.Setter;
 import com.group35.project.Book.Book;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import jakarta.persistence.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Getter
 @Setter
@@ -24,71 +29,83 @@ public class Inventory implements Serializable {
     private long id;
     private int size;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<Book> bookInventory = new ArrayList<Book>();
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @JoinColumn(name = "inventory_id")
+    private Map<Long, Book> books;
+    //private List<Book> bookInventory = new ArrayList<Book>();
+
+    @ElementCollection
+    @CollectionTable(name = "inventory_stock", joinColumns = @JoinColumn(name = "inventory_id"))
+    @MapKeyColumn(name = "book_id")
+    private Map<Long, Integer> stock;
+
+
 
     public Inventory() {
+        this.stock = new HashMap<>();
+        this.books = new HashMap<>();
         this.size = 0;
     }
 
     public void addBook(Book book) {
-        if (bookInventory ==null) bookInventory = new ArrayList<>();
-        bookInventory.add(book);
-        this.size++;
+        if (book.getId() == null) {
+            throw new IllegalArgumentException("Book must be persisted before adding to inventory");
+        }
+
+        Long bookId = book.getId();
+        books.put(bookId, book);
+        stock.put(bookId, stock.getOrDefault(bookId, 0) + 1);
     }
 
-    public void removeBook(Book book) {bookInventory.remove(book);
-    this.size--;}
-
-    public boolean removeBook(String isbn) {
-        for (Book book : bookInventory){
-            if(book.getIsbn() == isbn) {
-                bookInventory.remove(book);
-                return true;
-            }
+    public boolean removeBook(Long bookId) {
+        if (books.containsKey(bookId)) {
+            books.remove(bookId);
+            stock.remove(bookId);
+            return true;
         }
         return false;
     }
 
-    public void printBooks() {
-        for (Book book : bookInventory) {
-            System.out.println(book.toString());
+    public boolean removeBookByISBN(String isbn) {
+        for (Map.Entry<Long, Book> entry : books.entrySet()) {
+            if (entry.getValue().getIsbn().equals(isbn)) {
+                return removeBook(entry.getKey());
+            }
         }
+        return false; // Book with the given ISBN not found
+    }
+
+    public Book getBook(Long bookId) {
+        return books.get(bookId);
+    }
+
+    public boolean hasBook(int bookId) {
+        return books.containsKey(bookId);
+    }
+
+    public boolean decreaseStock(Long bookId) {
+        if (stock.containsKey(bookId) && stock.get(bookId) > 0) {
+            stock.put(bookId, stock.get(bookId) - 1);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean increaseStock(Long bookId, int amount) {
+        if (books.containsKey(bookId)) {
+            stock.put(bookId, stock.getOrDefault(bookId, 0) + amount);
+            return true;
+        }
+        return false;
     }
 
     public void printInventory() {
-        if (bookInventory.isEmpty()) {
-            System.out.println("Inventory is empty");
-        }else {
-            for (Book book : bookInventory) {
-                System.out.println(book);
-            }
+        System.out.println("Inventory:");
+        for (Long bookId : books.keySet()) {
+            Book book = books.get(bookId);
+            int count = stock.getOrDefault(bookId, 0);
+            System.out.println(book + " | Stock: " + count);
         }
-    }
-
-
-    public void removeBookWithId(Long bookId) {
-        bookInventory.removeIf(book -> book.getId().equals(bookId));
-        this.size = bookInventory.size();
-    }
-
-    public void removeBookWithISBN(String isbn) {
-        bookInventory.removeIf(book -> book.getIsbn().equals(isbn));
-        this.size = bookInventory.size();
-    }
-
-    public boolean hasBook(String isbn){
-        for (Book b : bookInventory){
-            if (b.getIsbn().equals(isbn)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-
-    public com.group35.project.Book.Book getBook(int index) {
-        return bookInventory.get(index);
     }
 
     public Long getId() {
@@ -96,23 +113,27 @@ public class Inventory implements Serializable {
     }
 
     public int getSize() {
-        return bookInventory.size();
+        return books.size();
     }
 
-    public List<Book> getBooks() {
-        return bookInventory;
+    public Map<Long, Book> getAllBooks() {
+        return books;
+    }
+
+    public Map<Long, Integer> getStock() {
+        return stock;
     }
 
     public void setSize(int size){
         this.size = size;
     }
 
+    @Override
     public String toString() {
-        String output = "";
-        for (Book b : bookInventory) {
-            output += "Isbn:" + b.getIsbn() + " Title: " +  b.getTitle() + " Author: " + b.getAuthor() + "\n";
-        }
-
-        return output;
+        return "Inventory{" +
+                "id=" + id +
+                ", size=" + size +
+                ", books=" + (books != null ? books.keySet() : "[]") +
+                '}';
     }
 }

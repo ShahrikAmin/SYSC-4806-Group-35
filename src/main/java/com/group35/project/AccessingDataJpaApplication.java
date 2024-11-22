@@ -61,30 +61,36 @@ public class AccessingDataJpaApplication {
 
 
     @Bean
-    public CommandLineRunner inventoryRun(InventoryRepository repository) {
+    public CommandLineRunner inventoryRun(BookRepository bookRepository, InventoryRepository inventoryRepository) {
         return (args) -> {
-            Inventory bookInventory = new Inventory();  //Creates Book inventory
-
             Book book1 = new Book("12345", "The Book", "The Author", "The Publisher", "The Epic Description", 9.99, "The Ultimate Picture URL");
             Book book2 = new Book("23451", "The Book 2", "The Author", "The Publisher", "The Epic Description 2", 9.99, "The Ultimate Picture URL");
             Book book3 = new Book("34512", "The Book 3", "The Author", "The Publisher", "The Epic Description 3", 9.99, "The Ultimate Picture URL");
+
+            // Save books to the repository and ensure they are managed
+            book1 = bookRepository.save(book1);
+            book2 = bookRepository.save(book2);
+            book3 = bookRepository.save(book3);
+
+            Inventory bookInventory = new Inventory();  //Creates Book inventory
+            inventoryRepository.save(bookInventory);
 
             bookInventory.addBook(book1);
             bookInventory.addBook(book2);
             bookInventory.addBook(book3);
 
-            repository.save(bookInventory);
+            inventoryRepository.save(bookInventory);
 
             log.info("bookInventory found with findAll():");
             log.info("-------------------------------");
-            repository.findAll().forEach(inventory -> {
+            inventoryRepository.findAll().forEach(inventory -> {
                 log.info(inventory.toString());
             });
             log.info("");
 
 
             // fetch an individual book by ID
-            Inventory inventory = repository.findById(1L);
+            Inventory inventory = inventoryRepository.findById(1L);
             log.info("inventory found with findById(1L):");
             log.info("--------------------------------");
             log.info(inventory.toString());
@@ -92,8 +98,8 @@ public class AccessingDataJpaApplication {
 
             /// get books in each address book
             log.info("books in address books:");
-            repository.findAll().forEach(ab -> {
-                ab.getBooks().forEach(b -> log.info(b.getTitle() + " " + b.getId()));
+            inventoryRepository.findAll().forEach(ab -> {
+                ab.getAllBooks().values().forEach(b -> log.info(b.getTitle() + " " + b.getId()));
             });
         };
 
