@@ -28,7 +28,6 @@ public class ThymeleafController {
     }
 
     // Display inventory page with the list of books in inventory (accessible to both roles)
-
     @GetMapping("/user/home")
     public String showInventory(@RequestParam(value = "isbn", required = false) String isbn,
                                 @RequestParam(value = "title", required = false) String title,
