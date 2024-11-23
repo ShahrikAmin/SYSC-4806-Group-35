@@ -5,6 +5,7 @@ import com.group35.project.Book.BookService;
 import com.group35.project.Inventory.Inventory;
 import com.group35.project.Inventory.InventoryRepository;
 import com.group35.project.Inventory.InventoryService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,45 +32,8 @@ public class ThymeleafController {
         this.inventoryRepository = inventoryRepository;
     }
 
-    // Display inventory page with the list of books in inventory
+    // Display inventory page with search functionality
     @GetMapping("/books")
-//    public String showInventory(Model model) {
-//        //List<Inventory> inventoryList = inventoryService.getAllInventory();
-//        Inventory inventory = inventoryRepository.findById(1L);
-//        model.addAttribute("inventory", inventory);
-//        return "inventory-view";
-//    }
-
-//    public String showInventory(@RequestParam(value = "isbn", required = false) String isbn,
-//                                Model model) {
-//        List<Book> books;
-//        String searchType = null;
-//        Inventory inventory = inventoryRepository.findById(1L);
-//
-//        if (isbn != null && !isbn.isEmpty()) {
-//            try {
-//                Book book = bookService.findBookByIsbn(isbn);
-//                books = List.of(book);
-//                searchType = "ISBN: " + isbn;
-//            } catch (Exception e) {
-//                books = List.of();
-//                searchType = "No results for ISBN: " + isbn;
-//            }
-//        } else {
-//            if (inventory == null) {
-//                books = List.of();
-//                searchType = "No inventory found!";
-//            } else {
-//                books = inventory.getBooks();
-//            }
-//        }
-//
-//        model.addAttribute("inventory", inventory);
-//        model.addAttribute("books", books);
-//        model.addAttribute("searchType", searchType);
-//        return "inventory-view";
-//    }
-
     public String showInventory(@RequestParam(value = "isbn", required = false) String isbn,
                                 @RequestParam(value = "title", required = false) String title,
                                 Model model) {
@@ -115,8 +79,14 @@ public class ThymeleafController {
         return "inventory-view";
     }
 
-
-
+    // Display the shopping cart
+    @GetMapping("/user/shopping-cart")
+    public String showCart(Model model, HttpSession session) {
+        // Placeholder for shopping cart functionality
+        // ShoppingCart cart = shoppingCartService.getCart(session);
+        // model.addAttribute("cartItems", cart.getItems());
+        return "shopping-cart";
+    }
 
     // Display seller page for adding and removing books
     @GetMapping("/seller")
@@ -135,10 +105,10 @@ public class ThymeleafController {
                                      @RequestParam("price") Double price,
                                      @RequestParam("pictureUrl") String pictureUrl,
                                      Model model) {
-        if (inventoryRepository.findById(1L).hasBook(bookId)){
-            inventoryService.removeBookWithISBN(bookId,1L);
+        if (inventoryRepository.findById(1L).hasBook(bookId)) {
+            inventoryService.removeBookWithISBN(bookId, 1L);
             model.addAttribute("message", "Book edited successfully");
-        }else {
+        } else {
             model.addAttribute("message", "Book added successfully");
         }
         Book book = new Book(bookId, title, author, publisher, description, price, pictureUrl);
@@ -150,7 +120,7 @@ public class ThymeleafController {
     // Handle removing a book from the inventory
     @PostMapping("/seller/removeBook")
     public String removeBookFromInventory(@RequestParam("isbn") String isbn, Model model) {
-        inventoryService.removeBookWithISBN(isbn,1L);  // Remove from inventory (assuming inventoryId = 1)
+        inventoryService.removeBookWithISBN(isbn, 1L);  // Remove from inventory (assuming inventoryId = 1)
         model.addAttribute("message", "Book removed successfully");
         return "redirect:/thymeleaf/books";
     }

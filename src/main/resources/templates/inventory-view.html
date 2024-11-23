@@ -12,6 +12,7 @@
     .navbar a:hover { background-color: #555; }
     .content { padding: 20px; }
     .inventory-list { margin-top: 20px; }
+    .inventory-item { margin-bottom: 20px; }
     .book-item { padding: 10px; border-bottom: 1px solid #ccc; }
   </style>
 </head>
@@ -19,8 +20,9 @@
 
 <!-- Navbar -->
 <div class="navbar">
-  <a th:href="@{/thymeleaf/seller}">Seller Page</a>
+  <a th:href="@{/storeowner/home}">Seller Page</a>
   <a th:href="@{/thymeleaf/books}" class="active">Inventory</a>
+  <a th:href="@{/user/shopping-cart}">User Shopping Cart</a>
 </div>
 
 <!-- Inventory Content -->
@@ -46,10 +48,11 @@
     <p>No books found for <span th:text="${searchType}"></span>.</p>
   </div>
 
-  <!-- Display Book Inventory -->
-  <div th:if="${books != null and not books.isEmpty()}">
+  <!-- Display Search Results -->
+  <div th:if="${books != null and not books.isEmpty()}" class="search-results">
     <h3>Search Results:</h3>
-    <div class="inventory-list" id="inventory-list">
+    <div class="inventory-list">
+      <!-- Iterate over books in the search results -->
       <div th:each="book : ${books}" class="book-item">
         <strong>ISBN:</strong> <span th:text="${book.isbn}"></span><br>
         <strong>Title:</strong> <span th:text="${book.title}"></span><br>
@@ -62,9 +65,24 @@
     </div>
   </div>
 
-  <!-- Handle Empty Inventory -->
-  <div th:if="${books == null}">
-    <p>No inventory found!</p>
+  <!-- Display Full Inventory -->
+  <div th:if="${inventoryList != null}" class="full-inventory">
+    <h3>Full Inventory:</h3>
+    <div class="inventory-list">
+      <div th:each="inventory : ${inventoryList}" class="inventory-item">
+        <strong>Inventory ID:</strong> <span th:text="${inventory.id}"></span><br>
+        <div th:each="book : ${inventory.books}" class="book-item">
+          <strong>Book ID:</strong> <span th:text="${book.id}"></span><br>
+          <strong>ISBN:</strong> <span th:text="${book.isbn}"></span><br>
+          <strong>Title:</strong> <span th:text="${book.title}"></span><br>
+          <strong>Author:</strong> <span th:text="${book.author}"></span><br>
+          <strong>Publisher:</strong> <span th:text="${book.publisher}"></span><br>
+          <strong>Description:</strong> <span th:text="${book.description}"></span><br>
+          <strong>Price:</strong> $<span th:text="${book.price}"></span><br>
+          <strong>Picture:</strong> <img th:src="${book.pictureUrl}" alt="Book Image" width="100"><br>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
