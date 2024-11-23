@@ -19,19 +19,10 @@ public class InventoryService {
         this.bookRepository = bookRepository;
     }
     public List<Inventory> getAllInventory() {
-        List<Inventory> inventory = new ArrayList<>();
-        for (Inventory inv: repository.findAll()){
-            Inventory i = new Inventory();
-            if(inv.getSize() != 0){
-                for (Book b : inv.getAllBooks().values()){
-                    i.addBook(b);
-                }
-            }
-            inventory.add(i);
-        }
-        return inventory;
+        List<Inventory> inventories = new ArrayList<>();
+        repository.findAll().forEach(inventories::add);
+        return inventories;
     }
-
     public void createNewInventory() {
         Inventory newInventory = new Inventory();
         newInventory.setSize(0);
