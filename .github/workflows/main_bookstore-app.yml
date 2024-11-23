@@ -42,5 +42,5 @@ jobs:
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v3
       with:
-        app-name: 'bookstore-app'
+        app-name: 'bookstore-application-group35'
         package: '${{ github.workspace }}/target/SYSC4806-Group-35-1.0-SNAPSHOT.jar'
