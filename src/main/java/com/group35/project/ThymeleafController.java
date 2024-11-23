@@ -70,10 +70,10 @@ public class ThymeleafController {
         return "redirect:/storeowner/home";
     }
 
-    // Handle removing a book from the inventory (accessible only to STORE_OWNER)
+//     Handle removing a book from the inventory (accessible only to STORE_OWNER)
     @PostMapping("/storeowner/removeBook")
     public String removeBookFromInventory(@RequestParam("isbn") String isbn, Model model) {
-        inventoryService.removeBookWithISBN(isbn, 1L);  // Remove from inventory (assuming inventoryId = 1)
+        inventoryService.removeBookByISBN(isbn, 1L);  // Remove from inventory (assuming inventoryId = 1)
         model.addAttribute("message", "Book removed successfully");
         return "redirect:/storeowner/home";
     }

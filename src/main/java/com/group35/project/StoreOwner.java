@@ -21,7 +21,7 @@ public class StoreOwner {
     }
 
     public boolean removeBook(String isbn) {
-        boolean removed = inventory.removeBook(isbn);
+        boolean removed = inventory.removeBookByISBN(isbn);
         if (removed) {
             System.out.println("Book removed from inventory with ISBN: " + isbn);
         } else {
@@ -34,7 +34,7 @@ public class StoreOwner {
         return inventory;
     }
 
-    public boolean editBook(int index, String newIsbn, String newTitle, String newAuthor, String newPublisher, String newDescription, Double newPrice, String newPictureUrl) {
+    public boolean editBook(Long index, String newIsbn, String newTitle, String newAuthor, String newPublisher, String newDescription, Double newPrice, String newPictureUrl) {
         Book book = inventory.getBook(index);
         if (book != null) {
             book.setIsbn(newIsbn);
