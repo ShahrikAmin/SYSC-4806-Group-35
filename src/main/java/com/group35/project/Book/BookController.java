@@ -54,6 +54,24 @@ public class BookController {
         return this.bookService.findBooksByTitleContaining(keyword);
     }
 
+    // Find a book by ISBN
+    @GetMapping("/search/isbn")
+    public Book findBookByIsbn(@RequestParam String isbn) {
+        return this.bookService.findBookByIsbn(isbn);
+    }
+
+    // Find books by author
+    @GetMapping("/search/author")
+    public List<Book> findBooksByAuthor(@RequestParam String author) {
+        return this.bookService.findBooksByAuthor(author);
+    }
+
+    // Find books by publisher
+    @GetMapping("/search/publisher")
+    public List<Book> findBooksByPublisher(@RequestParam String publisher) {
+        return this.bookService.findBooksByPublisher(publisher);
+    }
+
     // Delete a book by ID
     @DeleteMapping("/{id}")
     public void deleteBookById(@PathVariable Long id) {

@@ -9,5 +9,9 @@ import java.util.List;
 public interface BookRepository extends CrudRepository<Book, Long>{
     List<Book> findByTitle(String title);
     List<Book> findByTitleContaining(String word);
+    Book findByIsbn(String isbn);
+    List<Book> findByAuthor(String author);
+
+    List<Book> findByPublisher(String publisher);
 
 }
