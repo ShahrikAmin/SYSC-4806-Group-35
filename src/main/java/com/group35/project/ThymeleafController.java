@@ -10,6 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Controller
 public class ThymeleafController {
 
@@ -26,11 +29,53 @@ public class ThymeleafController {
 
     // Display inventory page with the list of books in inventory (accessible to both roles)
     @GetMapping("/user/home")
-    public String showInventory(Model model) {
-        Inventory inventory = inventoryRepository.findById(1L);
-        model.addAttribute("inventory", inventory);
+    public String showInventory(@RequestParam(value = "isbn", required = false) String isbn,
+                                @RequestParam(value = "title", required = false) String title,
+                                Model model) {
+
+        List<Book> books = List.of();
+        String searchType = null;
+
+        // Check for search parameters
+        if (isbn != null && !isbn.isEmpty()) {
+            try {
+                Book book = bookService.findBookByIsbn(isbn);
+                books = List.of(book);
+                searchType = "ISBN: " + isbn;
+            } catch (Exception e) {
+                searchType = "No results for ISBN: " + isbn;
+            }
+        } else if (title != null && !title.isEmpty()) {
+            books = bookService.findBooksByTitle(title);
+            if (!books.isEmpty()) {
+                searchType = "Title: " + title;
+            } else {
+                searchType = "No results for Title: " + title;
+            }
+        } else {
+            Inventory inventory = inventoryRepository.findById(1L);
+            if (inventory != null) {
+                books = new ArrayList<>(inventory.getBooks().values());
+                searchType = "All Books";
+            } else {
+                searchType = "No inventory found!";
+                books = List.of(); // Ensure books is not null
+            }
+        }
+
+
+        model.addAttribute("books", books);
+        model.addAttribute("searchType", searchType);
+
+        List<Inventory> inventoryList = new ArrayList<>();
+        inventoryRepository.findAll().forEach(inventoryList::add);
+        model.addAttribute("inventoryList", inventoryList);
+
         return "inventory-view";
     }
+
+
+
 
     // Display the shopping cart
     @GetMapping("/user/shopping-cart")

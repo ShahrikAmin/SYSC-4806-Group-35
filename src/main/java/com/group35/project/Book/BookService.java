@@ -24,6 +24,21 @@ public class BookService {
         return this.bookRepository.save(book);
     }
 
+    //find a book by isbn
+    public Book findBookByIsbn(String isbn){
+        return this.bookRepository.findByIsbn(isbn);
+    }
+
+    //find books by an author
+    public List<Book> findBooksByAuthor(String author){
+        return this.bookRepository.findByAuthor(author);
+    }
+
+    //find books by a publisher
+    public List<Book> findBooksByPublisher(String publisher){
+        return this.bookRepository.findByPublisher(publisher);
+    }
+
     //Find a book by ID
     public Optional<Book> findBookById(Long id) {
         return this.bookRepository.findById(id);
