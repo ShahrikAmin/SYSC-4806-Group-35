@@ -29,7 +29,7 @@ public class Inventory implements Serializable {
     private long id;
     private int size;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "inventory_id")
     private Map<Long, Book> books;
     //private List<Book> bookInventory = new ArrayList<Book>();
