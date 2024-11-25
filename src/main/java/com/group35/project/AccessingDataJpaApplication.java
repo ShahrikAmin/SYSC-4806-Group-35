@@ -4,6 +4,9 @@ import com.group35.project.Book.Book;
 import com.group35.project.Book.BookRepository;
 import com.group35.project.Inventory.Inventory;
 import com.group35.project.Inventory.InventoryRepository;
+import com.group35.project.ShoppingCart.ShoppingCart;
+import com.group35.project.ShoppingCart.ShoppingCartRepository;
+import org.antlr.v4.runtime.misc.LogManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -101,6 +104,46 @@ public class AccessingDataJpaApplication {
             inventoryRepository.findAll().forEach(ab -> {
                 ab.getAllBooks().values().forEach(b -> log.info(b.getTitle() + " " + b.getId()));
             });
+        };
+
+    }
+    @Bean
+    public CommandLineRunner shoppingCartRun(BookRepository bookRepository,ShoppingCartRepository cartRepository){
+        return (args) -> {
+            Book book1 = new Book("12345", "The Book", "The Author", "The Publisher", "The Epic Description", 9.99, "The Ultimate Picture URL");
+            Book book2 = new Book("23451", "The Book 2", "The Author", "The Publisher", "The Epic Description 2", 9.99, "The Ultimate Picture URL");
+            Book book3 = new Book("34512", "The Book 3", "The Author", "The Publisher", "The Epic Description 3", 9.99, "The Ultimate Picture URL");
+
+            // Save books to the repository and ensure they are managed
+            book1 = bookRepository.save(book1);
+            book2 = bookRepository.save(book2);
+            book3 = bookRepository.save(book3);
+
+            ShoppingCart usersCart = new ShoppingCart();
+
+            usersCart.addItem(book1,1);
+            usersCart.addItem(book2,2);
+            usersCart.addItem(book3,2);
+
+            cartRepository.save(usersCart);
+
+
+
+            List<ShoppingCart> allCarts = cartRepository.findAll(); // Store result in a variable
+            log.info("Shopping carts found with findAll():");
+            log.info("-------------------------------");
+            allCarts.forEach(cart -> {
+                log.info(cart.toString());
+            });
+            log.info("");
+
+            //find a cart with user id
+            ShoppingCart testCart = cartRepository.findByUserId(1L);
+            log.info("cart found with findById(1L):");
+            log.info("--------------------------------");
+            log.info(testCart.toString());
+            log.info("");
+
         };
 
     }
