@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ask AI</title>
+    <style>
+        /* Basic styles */
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        .navbar { background-color: #333; overflow: hidden; }
+        .navbar a { float: left; color: white; text-align: center; padding: 14px 20px; text-decoration: none; }
+        .navbar a:hover { background-color: #555; }
+        .content { padding: 20px; }
+        .form-group { margin-bottom: 1rem; }
+        label { font-weight: bold; display: block; margin-bottom: 0.5rem; }
+        textarea { width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 1rem; }
+        button { padding: 0.5rem 1rem; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background-color: #0056b3; }
+        .response { margin-top: 20px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; background-color: #f9f9f9; }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<div class="navbar">
+    <a th:href="@{/storeowner/home}" sec:authorize="hasRole('ROLE_STORE_OWNER')">Seller Page</a>
+    <a th:href="@{/user/home}">Inventory</a>
+    <a th:href="@{/user/shopping-cart}" sec:authorize="hasRole('ROLE_USER')">User Shopping Cart</a>
+    <a th:href="@{/AskAI}" class="active">Ask AI</a>
+</div>
+
+<!-- Ask AI Content -->
+<div id="ask-ai-page" class="content">
+    <h2>Ask AI</h2>
+    <form method="post" action="/AskAI">
+        <!-- CSRF Token -->
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+        <div class="form-group">
+            <label for="msg">Enter your question:</label>
+            <textarea id="msg" name="msg" rows="4" placeholder="Type your question here..." required></textarea>
+        </div>
+        <button type="submit">Ask</button>
+    </form>
+
+
+    <div class="response" th:if="${response}">
+        <h3>Response:</h3>
+        <p th:text="${response}"></p>
+    </div>
+</div>
+
+</body>
+</html>

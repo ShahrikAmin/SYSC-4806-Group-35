@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,8 +20,9 @@
 <body>
     <!-- Navbar -->
     <div class="navbar">
-        <a th:href="@{/user/home}" class="active">Inventory</a>
-        <a th:href="@{/user/shopping-cart}">User Shopping Cart</a>
+        <a th:href="@{/user/home}">Inventory</a>
+        <a th:href="@{/user/shopping-cart}" class="active" sec:authorize="hasRole('ROLE_USER')">User Shopping Cart</a>
+        <a th:href="@{/AskAI}">Ask AI</a>
     </div>
   <h1>HELLO WORLD TO THE SHOPPING CART !!</h1>
 </body>
