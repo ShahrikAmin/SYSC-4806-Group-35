@@ -31,12 +31,15 @@ public class ThymeleafController {
     @GetMapping("/user/home")
     public String showInventory(@RequestParam(value = "isbn", required = false) String isbn,
                                 @RequestParam(value = "title", required = false) String title,
+                                @RequestParam(value = "keyword", required = false) String keyword,
+                                @RequestParam(value = "author", required = false) String author,
+                                @RequestParam(value = "publisher", required = false) String publisher,
                                 Model model) {
 
         List<Book> books = List.of();
         String searchType = null;
 
-        // Check for search parameters
+        // Check for search by ISBN
         if (isbn != null && !isbn.isEmpty()) {
             try {
                 Book book = bookService.findBookByIsbn(isbn);
@@ -45,24 +48,37 @@ public class ThymeleafController {
             } catch (Exception e) {
                 searchType = "No results for ISBN: " + isbn;
             }
-        } else if (title != null && !title.isEmpty()) {
+        }
+        // Check for search by Title
+        else if (title != null && !title.isEmpty()) {
             books = bookService.findBooksByTitle(title);
-            if (!books.isEmpty()) {
-                searchType = "Title: " + title;
-            } else {
-                searchType = "No results for Title: " + title;
-            }
-        } else {
+            searchType = !books.isEmpty() ? "Title: " + title : "No results for Title: " + title;
+        }
+        // Check for search by Keyword in Title
+        else if (keyword != null && !keyword.isEmpty()) {
+            books = bookService.findBooksByTitleContaining(keyword);
+            searchType = !books.isEmpty() ? "Keyword in Title: " + keyword : "No results for Keyword: " + keyword;
+        }
+        // Check for search by Author
+        else if (author != null && !author.isEmpty()) {
+            books = bookService.findBooksByAuthor(author);
+            searchType = !books.isEmpty() ? "Author: " + author : "No results for Author: " + author;
+        }
+        // Check for search by Publisher
+        else if (publisher != null && !publisher.isEmpty()) {
+            books = bookService.findBooksByPublisher(publisher);
+            searchType = !books.isEmpty() ? "Publisher: " + publisher : "No results for Publisher: " + publisher;
+        }
+        //Return Inventory
+        else {
             Inventory inventory = inventoryRepository.findById(1L);
             if (inventory != null) {
                 books = new ArrayList<>(inventory.getBooks().values());
                 searchType = "All Books";
             } else {
                 searchType = "No inventory found!";
-                books = List.of(); // Ensure books is not null
             }
         }
-
 
         model.addAttribute("books", books);
         model.addAttribute("searchType", searchType);
@@ -73,9 +89,6 @@ public class ThymeleafController {
 
         return "inventory-view";
     }
-
-
-
 
     // Display the shopping cart
     @GetMapping("/user/shopping-cart")
