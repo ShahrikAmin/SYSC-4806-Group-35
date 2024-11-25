@@ -65,7 +65,6 @@
     No books found matching your search criteria.
   </div>
 
-
   <!-- Handle empty inventory list -->
   <div th:if="${inventoryList == null || inventoryList.isEmpty()}">
     <p>No inventories found.</p>
@@ -84,6 +83,7 @@
       <strong>Publisher:</strong> <span th:text="${book.publisher}"></span> <br>
       <strong>Description:</strong> <span th:text="${book.description}"></span> <br>
       <strong>Price:</strong> $<span th:text="${book.price}"></span> <br>
+      <strong>Stock:</strong> <span th:text="${inventory.getQuantity(book.id)}"></span> <br>
       <strong>Picture:</strong> <img th:src="${book.pictureUrl}" alt="Book Image" width="100"> <br>
     </div>
   </div>

@@ -79,6 +79,9 @@ public class AccessingDataJpaApplication {
             bookInventory.addBook(book2);
             bookInventory.addBook(book3);
 
+            bookInventory.increaseStock(1L, 4);
+            bookInventory.increaseStock(3L, 2);
+
             inventoryRepository.save(bookInventory);
 
             log.info("bookInventory found with findAll():");
