@@ -34,6 +34,7 @@ public class Inventory implements Serializable {
     private Map<Long, Book> books;
     //private List<Book> bookInventory = new ArrayList<Book>();
 
+
     @ElementCollection
     @CollectionTable(name = "inventory_stock", joinColumns = @JoinColumn(name = "inventory_id"))
     @MapKeyColumn(name = "book_id")
@@ -122,6 +123,10 @@ public class Inventory implements Serializable {
 
     public Map<Long, Integer> getStock() {
         return stock;
+    }
+
+    public int getQuantity(Long id){
+        return stock.get(id);
     }
 
     public void setSize(int size){
