@@ -149,10 +149,27 @@ public class Inventory implements Serializable {
 
     @Override
     public String toString() {
+        StringBuilder booksDetails = new StringBuilder();
+
+        if (books != null && !books.isEmpty()) {
+            booksDetails.append("{");
+            for (Map.Entry<Long, Book> entry : books.entrySet()) {
+                Long bookId = entry.getKey();
+                Book book = entry.getValue();
+                booksDetails.append("ID: ").append(bookId).append(" -> ").append(book.toString()).append(", ");
+            }
+            if (booksDetails.length() > 1) {
+                booksDetails.setLength(booksDetails.length() - 2); // Remove the trailing comma and space
+            }
+            booksDetails.append("}");
+        } else {
+            booksDetails.append("{}"); // Empty map
+        }
+
         return "Inventory{" +
                 "id=" + id +
                 ", size=" + size +
-                ", books=" + (books != null ? books.keySet() : "[]") +
+                ", books=" + booksDetails +
                 '}';
     }
 }
