@@ -166,6 +166,12 @@ public class Inventory implements Serializable {
             booksDetails.append("{}"); // Empty map
         }
 
+        System.out.println("Inventory{" +
+                "id=" + id +
+                ", size=" + size +
+                ", books=" + booksDetails +
+                '}');
+
         return "Inventory{" +
                 "id=" + id +
                 ", size=" + size +

@@ -2,6 +2,7 @@ package com.group35.project.Login;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.Customizer;
@@ -22,6 +23,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         // Allow access to the login page
                         .requestMatchers("/login").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/search").permitAll() // Allow only GET requests for /search
                         // Define access based on roles
                         .requestMatchers("/storeowner/**").hasRole("STORE_OWNER")
                         .requestMatchers("/user/**").hasAnyRole("USER", "STORE_OWNER")
