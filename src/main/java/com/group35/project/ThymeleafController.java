@@ -73,7 +73,7 @@ public class ThymeleafController {
         else {
             Inventory inventory = inventoryRepository.findById(1L);
             if (inventory != null) {
-                books = new ArrayList<>(inventory.getBooks().values());
+                books = new ArrayList<>(inventory.getAllBooks().values());
                 searchType = "All Books";
             } else {
                 searchType = "No inventory found!";
@@ -122,10 +122,14 @@ public class ThymeleafController {
                                      Model model) {
 
         Book book = new Book(bookId, title, author, publisher, description, price, pictureUrl);
-        bookService.createBook(book);  // Save book in BookService
-        inventoryService.addBook(book, 1L);  // Add to inventory (assuming inventoryId = 1)
+        if(inventoryService.getAllInventory().get(0).hasBook(bookId)){
+            inventoryService.editBook(book,1L);
+        }else {
+            bookService.createBook(book);  // Save book in BookService
+            inventoryService.addBook(book, 1L);  // Add to inventory (assuming inventoryId = 1)
+        }
         model.addAttribute("message", "Book added successfully");
-        return "redirect:/storeowner/home";
+        return "redirect:/user/home";
     }
 
 //     Handle removing a book from the inventory (accessible only to STORE_OWNER)
