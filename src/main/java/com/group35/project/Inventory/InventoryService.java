@@ -35,16 +35,35 @@ public class InventoryService {
         repository.deleteById(id);
     }
 
-    public void addBook(Book book, Long inventoryId) {
+    public boolean addBook(Book book, Long inventoryId) {
+        Inventory inventory = repository.findById(inventoryId)
+                .orElseThrow(() -> new IllegalStateException("Inventory with id " + inventoryId + " does not exist"));
+        book = bookRepository.save(book);
+        inventory.addBook(book);
+        repository.save(inventory);
+        return true;
+    }
+
+
+    public boolean editBook(Book book, Long inventoryId) {
         Inventory inventory = repository.findById(inventoryId)
                 .orElseThrow(() -> new IllegalStateException("Inventory with id " + inventoryId + " does not exist"));
 
+        for(Book b : inventory.getAllBooks().values()){
+            if (b.getIsbn().equals(book.getIsbn())){
+                b.setTitle(book.getTitle());
+                b.setAuthor(book.getAuthor());
+                b.setPublisher(book.getPublisher());
+                b.setDescription(book.getDescription());
+                b.setPrice(book.getPrice());
+                b.setPictureUrl(book.getPictureUrl());
+                inventory.increaseStock(b.getId(),1);
+                bookRepository.save(b);
+                return true;
+            }
+        }
 
-        book = bookRepository.save(book);
-
-
-        inventory.addBook(book);
-        repository.save(inventory);
+        return false;
     }
 
     public void removeBook(Long inventoryId, Long BookId) {

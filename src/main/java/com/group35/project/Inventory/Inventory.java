@@ -80,8 +80,22 @@ public class Inventory implements Serializable {
         return books.get(bookId);
     }
 
-    public boolean hasBook(int bookId) {
-        return books.containsKey(bookId);
+    public Book getBookByISBN(String isbn) {
+        for(Book book : books.values()){
+            if (book.getIsbn().equals(isbn)){
+                return book;
+            }
+        }
+        return null;
+    }
+
+    public boolean hasBook(String isbn) {
+        for (Book b: this.books.values()) {
+            if (b.getIsbn().equals(isbn)){
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean decreaseStock(Long bookId) {
