@@ -115,6 +115,7 @@ public class Book {
                 ", author='" + author + '\'' +
                 ", publisher='" + publisher + '\'' +
                 ", price=" + price +
+                ", description=" + description + '\'' +
                 ", pictureUrl='" + pictureUrl + '\'' +
                 '}';
     }
