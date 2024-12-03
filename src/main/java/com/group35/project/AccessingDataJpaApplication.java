@@ -4,11 +4,6 @@ import com.group35.project.Book.Book;
 import com.group35.project.Book.BookRepository;
 import com.group35.project.Inventory.Inventory;
 import com.group35.project.Inventory.InventoryRepository;
-import com.group35.project.ShoppingCart.ShoppingCart;
-import com.group35.project.ShoppingCart.ShoppingCartRepository;
-import com.group35.project.User.User;
-import com.group35.project.User.UserRepository;
-import org.antlr.v4.runtime.misc.LogManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -28,25 +23,42 @@ public class AccessingDataJpaApplication {
         SpringApplication.run(AccessingDataJpaApplication.class, args);
     }
 
-
     @Bean
-    public CommandLineRunner commandLineRunner(UserRepository userRepository) {
-        return args -> {
-            // Create and save a new user
-            User user = new User();
-            user.setUsername("john_doe");
-            user.setPassword("password123");
-            user.setRole("ROLE_USER");
+    public CommandLineRunner bookRun(BookRepository repository) {
+        return (args) -> {
 
-            userRepository.save(user);
-            System.out.println("User saved: " + user);
+            repository.save(new Book("12345", "The Book", "The Author", "The Publisher", "The Epic Description", 9.99, "The Ultimate Picture URL"));
+            repository.save(new Book("23451", "The Book 2", "The Author", "The Publisher", "The Epic Description 2", 9.99, "The Ultimate Picture URL"));
+            repository.save(new Book("34512", "The Book 3", "The Author", "The Publisher", "The Epic Description 3", 9.99, "The Ultimate Picture URL"));
+            repository.save(new Book("45123", "The Book 4", "The Author's Pupil", "The Publisher's Pupil", "The Epic Description 4", 9.99, "The Ultimate Picture URL"));
+            repository.save(new Book("51234", "The Book 5", "The Author's Pupil", "The Publisher's Pupil", "The Epic Description 5", 9.99, "The Ultimate Picture URL"));
+            repository.save(new Book("54321", "The Book 6", "The Author's Pupil", "The Publisher's Pupil", "The Epic Description 6", 9.99, "The Ultimate Picture URL"));
 
-            // Retrieve the user by ID
-            User retrievedUser = userRepository.findById(user.getId())
-                    .orElseThrow(() -> new RuntimeException("User not found!"));
-            System.out.println("User retrieved: " + retrievedUser);
+            // fetch all books
+            log.info("Books found with findAll():");
+            log.info("-------------------------------");
+            repository.findAll().forEach(book -> {
+                log.info(book.toString());
+            });
+            log.info("");
+
+            // fetch an individual buddyinfo by ID
+            Optional<Book> book1 = repository.findById(1L);
+            log.info("Book found with findById(1L):");
+            log.info("--------------------------------");
+            log.info(book1.toString());
+            log.info("");
+
+            // fetch book by title
+            log.info("Book found with findByTitle('The Book'):");
+            log.info("--------------------------------------------");
+            repository.findByTitle("The Book").forEach(title -> {
+                log.info(title.toString());
+            });
+            log.info("");
         };
     }
+
 
     @Bean
     public CommandLineRunner inventoryRun(BookRepository bookRepository, InventoryRepository inventoryRepository) {
@@ -66,9 +78,6 @@ public class AccessingDataJpaApplication {
             bookInventory.addBook(book1);
             bookInventory.addBook(book2);
             bookInventory.addBook(book3);
-
-            bookInventory.increaseStock(1L, 4);
-            bookInventory.increaseStock(3L, 2);
 
             inventoryRepository.save(bookInventory);
 
@@ -92,48 +101,6 @@ public class AccessingDataJpaApplication {
             inventoryRepository.findAll().forEach(ab -> {
                 ab.getAllBooks().values().forEach(b -> log.info(b.getTitle() + " " + b.getId()));
             });
-        };
-
-    }
-    @Bean
-    public CommandLineRunner shoppingCartRun(BookRepository bookRepository,ShoppingCartRepository cartRepository){
-        return (args) -> {
-
-            Book book1 = new Book("12345", "The Book", "The Author", "The Publisher", "The Epic Description", 9.99, "The Ultimate Picture URL");
-            Book book2 = new Book("23451", "The Book 2", "The Author", "The Publisher", "The Epic Description 2", 9.99, "The Ultimate Picture URL");
-            Book book3 = new Book("34512", "The Book 3", "The Author", "The Publisher", "The Epic Description 3", 9.99, "The Ultimate Picture URL");
-
-            // Save books to the repository and ensure they are managed
-            book1 = bookRepository.save(book1);
-            book2 = bookRepository.save(book2);
-            book3 = bookRepository.save(book3);
-
-            ShoppingCart usersCart = new ShoppingCart();
-
-            usersCart.addItem(book1,1);
-            usersCart.addItem(book2,2);
-            usersCart.addItem(book3,2);
-
-            cartRepository.save(usersCart);
-
-
-
-            List<ShoppingCart> allCarts = cartRepository.findAll(); // Store result in a variable
-            log.info("Shopping carts found with findAll():");
-            log.info("-------------------------------");
-            allCarts.forEach(cart -> {
-                log.info(cart.toString());
-            });
-            log.info("");
-
-            //find a cart with user id
-            ShoppingCart testCart = cartRepository.findByUserId(1L).orElse(null);
-            if (testCart != null) {
-                log.info("cart found with findById(1L):");
-                log.info("--------------------------------");
-                log.info(testCart.toString());
-                log.info("");
-            }
         };
 
     }
