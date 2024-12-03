@@ -23,6 +23,7 @@ public class ShoppingCart {
     private List<CartItem> items;
 
 
+    @Setter
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -81,9 +82,13 @@ public class ShoppingCart {
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
 
+        @Getter
+        @Setter
         @ManyToOne
         private Book book;
 
+        @Getter
+        @Setter
         private int count;
 
         public CartItem(Book book, int count) {
@@ -93,22 +98,6 @@ public class ShoppingCart {
 
         public CartItem() {
 
-        }
-
-        public Book getBook() {
-            return book;
-        }
-
-        public void setBook(Book book) {
-            this.book = book;
-        }
-
-        public int getCount() {
-            return count;
-        }
-
-        public void setCount(int count) {
-            this.count = count;
         }
 
         @Override

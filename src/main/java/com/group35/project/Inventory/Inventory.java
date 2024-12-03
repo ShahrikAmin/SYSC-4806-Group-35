@@ -27,7 +27,7 @@ public class Inventory implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private int size;
+    protected int size;
 
     @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "inventory_id")

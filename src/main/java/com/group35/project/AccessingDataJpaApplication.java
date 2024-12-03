@@ -6,6 +6,8 @@ import com.group35.project.Inventory.Inventory;
 import com.group35.project.Inventory.InventoryRepository;
 import com.group35.project.ShoppingCart.ShoppingCart;
 import com.group35.project.ShoppingCart.ShoppingCartRepository;
+import com.group35.project.User.User;
+import com.group35.project.User.UserRepository;
 import org.antlr.v4.runtime.misc.LogManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,42 +28,25 @@ public class AccessingDataJpaApplication {
         SpringApplication.run(AccessingDataJpaApplication.class, args);
     }
 
-//    @Bean
-//    public CommandLineRunner bookRun(BookRepository repository) {
-//        return (args) -> {
-//
-//            repository.save(new Book("12345", "The Book", "The Author", "The Publisher", "The Epic Description", 9.99, "The Ultimate Picture URL"));
-//            repository.save(new Book("23451", "The Book 2", "The Author", "The Publisher", "The Epic Description 2", 9.99, "The Ultimate Picture URL"));
-//            repository.save(new Book("34512", "The Book 3", "The Author", "The Publisher", "The Epic Description 3", 9.99, "The Ultimate Picture URL"));
-//            repository.save(new Book("45123", "The Book 4", "The Author's Pupil", "The Publisher's Pupil", "The Epic Description 4", 9.99, "The Ultimate Picture URL"));
-//            repository.save(new Book("51234", "The Book 5", "The Author's Pupil", "The Publisher's Pupil", "The Epic Description 5", 9.99, "The Ultimate Picture URL"));
-//            repository.save(new Book("54321", "The Book 6", "The Author's Pupil", "The Publisher's Pupil", "The Epic Description 6", 9.99, "The Ultimate Picture URL"));
-//
-//            // fetch all books
-//            log.info("Books found with findAll():");
-//            log.info("-------------------------------");
-//            repository.findAll().forEach(book -> {
-//                log.info(book.toString());
-//            });
-//            log.info("");
-//
-//            // fetch an individual buddyinfo by ID
-//            Optional<Book> book1 = repository.findById(1L);
-//            log.info("Book found with findById(1L):");
-//            log.info("--------------------------------");
-//            log.info(book1.toString());
-//            log.info("");
-//
-//            // fetch book by title
-//            log.info("Book found with findByTitle('The Book'):");
-//            log.info("--------------------------------------------");
-//            repository.findByTitle("The Book").forEach(title -> {
-//                log.info(title.toString());
-//            });
-//            log.info("");
-//        };
-//    }
 
+    @Bean
+    public CommandLineRunner commandLineRunner(UserRepository userRepository) {
+        return args -> {
+            // Create and save a new user
+            User user = new User();
+            user.setUsername("john_doe");
+            user.setPassword("password123");
+            user.setRole("ROLE_USER");
+
+            userRepository.save(user);
+            System.out.println("User saved: " + user);
+
+            // Retrieve the user by ID
+            User retrievedUser = userRepository.findById(user.getId())
+                    .orElseThrow(() -> new RuntimeException("User not found!"));
+            System.out.println("User retrieved: " + retrievedUser);
+        };
+    }
 
     @Bean
     public CommandLineRunner inventoryRun(BookRepository bookRepository, InventoryRepository inventoryRepository) {
@@ -113,6 +98,7 @@ public class AccessingDataJpaApplication {
     @Bean
     public CommandLineRunner shoppingCartRun(BookRepository bookRepository,ShoppingCartRepository cartRepository){
         return (args) -> {
+
             Book book1 = new Book("12345", "The Book", "The Author", "The Publisher", "The Epic Description", 9.99, "The Ultimate Picture URL");
             Book book2 = new Book("23451", "The Book 2", "The Author", "The Publisher", "The Epic Description 2", 9.99, "The Ultimate Picture URL");
             Book book3 = new Book("34512", "The Book 3", "The Author", "The Publisher", "The Epic Description 3", 9.99, "The Ultimate Picture URL");
@@ -141,12 +127,13 @@ public class AccessingDataJpaApplication {
             log.info("");
 
             //find a cart with user id
-            ShoppingCart testCart = cartRepository.findByUserId(1L);
-            log.info("cart found with findById(1L):");
-            log.info("--------------------------------");
-            log.info(testCart.toString());
-            log.info("");
-
+            ShoppingCart testCart = cartRepository.findByUserId(1L).orElse(null);
+            if (testCart != null) {
+                log.info("cart found with findById(1L):");
+                log.info("--------------------------------");
+                log.info(testCart.toString());
+                log.info("");
+            }
         };
 
     }

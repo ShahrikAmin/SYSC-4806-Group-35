@@ -1,4 +1,4 @@
-package com.group35.project.Login;
+package com.group35.project.Auth;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +21,10 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorize -> authorize
                         // Allow access to the login page
+
+                        .requestMatchers("/signUp").permitAll()
                         .requestMatchers("/login").permitAll()
+
                         // Define access based on roles
                         .requestMatchers("/storeowner/**").hasRole("STORE_OWNER")
                         .requestMatchers("/user/**").hasAnyRole("USER", "STORE_OWNER")

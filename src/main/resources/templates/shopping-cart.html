@@ -25,7 +25,15 @@
         <a th:href="@{/AskAI}">Ask AI</a>
     </div>
   <h1>HELLO WORLD TO THE SHOPPING CART !!</h1>
+    <h1>Shopping Cart</h1>
 
+
+        <p class="total">Total Price: <span th:text="${shoppingCart.getTotalPrice()}"></span></p>
+
+        <!-- Action buttons -->
+        <a th:href="@{/api/shoppingcart/{id}/add(cartId=${shoppingCart.id})}" class="action-btn">Add Item</a>
+        <a th:href="@{/api/shoppingcart/{id}/remove(cartId=${shoppingCart.id})}" class="action-btn">Remove Item</a>
+    </div>
 
     <button type="submit">Proceed to Checkout</button>
 </body>

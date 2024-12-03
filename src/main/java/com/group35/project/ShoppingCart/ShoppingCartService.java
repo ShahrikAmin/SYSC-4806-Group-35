@@ -1,6 +1,7 @@
 package com.group35.project.ShoppingCart;
 
 import com.group35.project.Book.Book;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,13 @@ public class ShoppingCartService {
 
     public List<ShoppingCart> getAllShoppingCarts() {
         return shoppingCartRepository.findAll();
+    }
+
+    public ShoppingCart getCart(HttpSession session) {
+        // Retrieve the cart ID from the session
+        Long userId = (Long) session.getAttribute("user_id");
+
+        return shoppingCartRepository.findByUserId(userId).orElse(new ShoppingCart());
     }
 
     public ShoppingCart addItemToCart(Long cartId, Book book, int count) {
@@ -70,6 +78,6 @@ public class ShoppingCartService {
     }
 
     public ShoppingCart findShoppingCartByUserId(Long userId) {
-        return shoppingCartRepository.findByUserId(userId);
+        return shoppingCartRepository.findByUserId(userId).orElse(null);
     }
 }
