@@ -4,6 +4,8 @@ import com.group35.project.Book.BookService;
 import com.group35.project.Inventory.Inventory;
 import com.group35.project.Inventory.InventoryRepository;
 import com.group35.project.Inventory.InventoryService;
+import com.group35.project.ShoppingCart.ShoppingCart;
+import com.group35.project.ShoppingCart.ShoppingCartService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,12 +21,14 @@ public class ThymeleafController {
     private final InventoryService inventoryService;
     private final BookService bookService;
     private final InventoryRepository inventoryRepository;
+    private final ShoppingCartService shoppingCartService;
 
     @Autowired
-    public ThymeleafController(InventoryService inventoryService, BookService bookService, InventoryRepository inventoryRepository) {
+    public ThymeleafController(InventoryService inventoryService, BookService bookService, InventoryRepository inventoryRepository, ShoppingCartService shoppingCartService) {
         this.inventoryService = inventoryService;
         this.bookService = bookService;
         this.inventoryRepository = inventoryRepository;
+        this.shoppingCartService = shoppingCartService;
     }
 
     // Display inventory page with the list of books in inventory (accessible to both roles)
@@ -94,12 +98,8 @@ public class ThymeleafController {
     @GetMapping("/user/shopping-cart")
     public String showCart(Model model, HttpSession session) {
 
-        /* NOTE TO TEAM MEMBER, WHOEVER MAKING THE SHOPPING CART, I ADDED and COMMENTED TWO BELOW LINES
-        OF CODE FOR YOU
-         */
-
-        // ShoppingCart cart = shoppingCartService.getCart(session);
-        // model.addAttribute("cartItems", cart.getItems());
+        ShoppingCart cart = shoppingCartService.getCart(session);
+        model.addAttribute("shoppingCart", cart);
         return "shopping-cart";
     }
 
