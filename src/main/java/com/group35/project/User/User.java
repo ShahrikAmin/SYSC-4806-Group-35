@@ -1,7 +1,7 @@
 package com.group35.project.User;
 
 
-import com.group35.project.ShoppingCart;
+import com.group35.project.ShoppingCart.ShoppingCart;
 import jakarta.persistence.*;
 import com.group35.project.Book.Book;
 import com.group35.project.Inventory.Inventory;
@@ -23,31 +23,12 @@ public class User {
     @Column(nullable = false)
     private String role; // this role is  either set to "ROLE_USER" or "ROLE_STORE_OWNER"
 
-    private ShoppingCart shoppingCart;
 
     public User() {
-        this.shoppingCart = new ShoppingCart();
     }
 
     public Map<Long, Book> browseBooks(Inventory inventory) {
         return inventory.getAllBooks();
-    }
-
-    public void addToCart(Book book) {
-        shoppingCart.addBook(book);
-        System.out.println("Book added to shopping cart: " + book);
-    }
-
-    public void checkout(Inventory inventory) {
-//        if (shoppingCart.checkout(inventory)) {
-//            System.out.println("Checkout successful.");
-//        } else {
-//            System.out.println("Checkout failed: Not enough inventory.");
-//        }
-    }
-
-    public ShoppingCart getShoppingCart() {
-        return shoppingCart;
     }
 
 }

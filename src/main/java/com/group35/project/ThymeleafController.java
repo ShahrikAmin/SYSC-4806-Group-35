@@ -90,19 +90,6 @@ public class ThymeleafController {
         return "inventory-view";
     }
 
-    // Display the shopping cart
-    @GetMapping("/user/shopping-cart")
-    public String showCart(Model model, HttpSession session) {
-
-        /* NOTE TO TEAM MEMBER, WHOEVER MAKING THE SHOPPING CART, I ADDED and COMMENTED TWO BELOW LINES
-        OF CODE FOR YOU
-         */
-
-        // ShoppingCart cart = shoppingCartService.getCart(session);
-        // model.addAttribute("cartItems", cart.getItems());
-        return "shopping-cart";
-    }
-
     // Display seller page for adding and removing books (accessible only to STORE_OWNER)
     @GetMapping("/storeowner/home")
     public String showSellerPage(Model model) {

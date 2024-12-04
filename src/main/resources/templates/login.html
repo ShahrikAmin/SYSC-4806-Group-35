@@ -3,10 +3,74 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Login - Bookstore</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+        }
+        h2 {
+            margin-bottom: 20px;
+        }
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        form div {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .signup {
+            margin-top: 10px;
+            text-align: center;
+        }
+        .signup a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .signup a:hover {
+            text-decoration: underline;
+        }
+        .error-message {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
-<h2>Login</h2>
 <form th:action="@{/login}" method="post">
+    <h2>Login</h2>
     <div>
         <label>Username:</label>
         <input type="text" name="username" required />
@@ -18,9 +82,12 @@
     <div>
         <button type="submit">Login</button>
     </div>
+    <div class="signup">
+        <p>Don't have an account? <a th:href="@{/signup}">Sign Up</a></p>
+    </div>
+    <div th:if="${param.error}" class="error-message">
+        <p>Invalid username or password.</p>
+    </div>
 </form>
-<div th:if="${param.error}">
-    <p style="color:red;">Invalid username or password.</p>
-</div>
 </body>
 </html>
