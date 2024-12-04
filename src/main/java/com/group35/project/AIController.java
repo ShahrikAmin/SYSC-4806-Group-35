@@ -56,7 +56,7 @@ public class AIController {
             // Append book details to the GPT prompt
             String prompt = "Here is our book inventory:\n" + inventoryData +
                     "\nAdditionally, here are the details for the book '" + bookTitle + ", with rating of " + rating + "':\n" + bookDetailsResponse +
-                    "\nBased on this inventory, only using these books in our inventory and not any book from the internet, " + msg;
+                    "\nBased on only the first inventory provided, only using these books in our inventory and not any book from the internet, " + msg;
 
             System.out.println(prompt);
 
