@@ -8,33 +8,137 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Inventory Page</title>
   <style>
-    /* Basic styles */
-    body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-    .navbar { background-color: #333; overflow: hidden; padding: 0 10px; }
-    .navbar a { float: left; color: white; text-align: center; padding: 14px 20px; text-decoration: none; }
-    .navbar a:hover { background-color: #555; }
-    .navbar .logout-container { float: right; margin-right: 10px; }
-    .navbar .logout-container button {
-        background-color: #f44336; /* Red color */
+    /* General Styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+    }
+
+    .navbar {
+    background-color: #333;
+    overflow: hidden;
+    padding: 0 15px;
+    }
+
+    .navbar a {
+        float: left;
+        color: white;
+        text-align: center;
+        padding: 14px 20px;
+        text-decoration: none;
+    }
+
+    .navbar a:hover {
+        background-color: #555;
+    }
+
+    .logout-container {
+        float: right;
+        margin-right: 10px;
+    }
+
+    .logout-container button {
+        background-color: #f44336;
         color: white;
         border: none;
         padding: 10px 16px;
-        margin: 8px 0; /* Align with navbar items */
+        margin: 8px 0;
         cursor: pointer;
         border-radius: 4px;
         font-size: 14px;
     }
-    .navbar .logout-container button:hover {
-        background-color: #d32f2f; /* Darker red on hover */
+
+    .logout-container button:hover {
+        background-color: #d32f2f;
     }
-    .content { padding: 20px; }
-    .inventory-list { margin-top: 20px; }
-    .inventory-item { margin-bottom: 20px; }
-    .book-item { padding: 10px; border-bottom: 1px solid #ccc; }
+
+
+    .content {
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 900px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .content h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    /* Form Styles */
+    form {
+      margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    form label {
+      font-weight: bold;
+      flex: 1 1 100%;
+    }
+
+    form input,
+    form button {
+      padding: 10px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      flex: 1 1 calc(50% - 10px);
+    }
+
+    form button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      flex: 1 1 100%;
+    }
+
+    form button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Inventory Styles */
+    .inventory-item {
+      padding: 15px;
+      margin-bottom: 20px;
+      background-color: #f9f9f9;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .inventory-item img {
+      width: 120px;
+      height: auto;
+      border-radius: 4px;
+    }
+
+    .inventory-details {
+      flex: 1 1 calc(100% - 140px);
+    }
+
+    .inventory-details strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .message {
+      color: red;
+      font-weight: bold;
+      margin-top: 10px;
+    }
   </style>
 </head>
-<body>
 
+<body>
 <!-- Navbar -->
 <div class="navbar">
   <a th:href="@{/storeowner/home}" sec:authorize="hasRole('ROLE_STORE_OWNER')">Seller Page</a>
@@ -48,66 +152,65 @@
   </div>
 </div>
 
-
 <!-- Inventory Content -->
-<div id="inventory-page" class="content">
+<div class="content">
   <h2>Book Inventory</h2>
 
   <!-- Search Form -->
-  <form action="#" th:action="@{/user/home}" method="GET" style="margin-bottom: 20px;">
-    <h3>Search Books</h3>
-    <div class="form-group">
-      <label for="isbn">Search by ISBN:</label>
-      <input type="text" id="isbn" name="isbn" placeholder="Enter ISBN">
-    </div>
-    <div class="form-group">
-      <label for="title">Search by Title:</label>
-      <input type="text" id="title" name="title" placeholder="Enter Title">
-    </div>
-    <div class="form-group">
-      <label for="keyword">Search by Keyword in Title:</label>
-      <input type="text" id="keyword" name="keyword" placeholder="Enter Keyword">
-    </div>
-    <div class="form-group">
-      <label for="author">Search by Author:</label>
-      <input type="text" id="author" name="author" placeholder="Enter Author">
-    </div>
-    <div class="form-group">
-      <label for="publisher">Search by Publisher:</label>
-      <input type="text" id="publisher" name="publisher" placeholder="Enter Publisher">
-    </div>
+  <form action="#" th:action="@{/user/home}" method="GET">
+    <label for="isbn">Search by ISBN:</label>
+    <input type="text" id="isbn" name="isbn" placeholder="Enter ISBN">
+
+    <label for="title">Search by Title:</label>
+    <input type="text" id="title" name="title" placeholder="Enter Title">
+
+    <label for="keyword">Search by Keyword in Title:</label>
+    <input type="text" id="keyword" name="keyword" placeholder="Enter Keyword">
+
+    <label for="author">Search by Author:</label>
+    <input type="text" id="author" name="author" placeholder="Enter Author">
+
+    <label for="publisher">Search by Publisher:</label>
+    <input type="text" id="publisher" name="publisher" placeholder="Enter Publisher">
+
     <button type="submit">Search</button>
   </form>
 
-  <!-- Display Notification if Search Yields No Results -->
+  <!-- Notification if No Results -->
   <div th:if="${books != null && books.isEmpty()}" class="message">
     No books found matching your search criteria.
   </div>
 
-  <!-- Handle empty inventory list -->
+  <!-- Handle Empty Inventory -->
   <div th:if="${inventoryList == null || inventoryList.isEmpty()}">
     <p>No inventories found.</p>
   </div>
 
-  <!-- Iterate over inventory list -->
-  <div th:each="inventory : ${inventoryList}" class="inventory-item">
-    <strong>Inventory ID:</strong> <span th:text="${inventory.id}"></span> <br>
-    <!-- Iterate over books in the inventory -->
-    <div th:each="book : ${books}" class="book-item">
-      <!-- Access book details -->
-      <strong>Book ID:</strong> <span th:text="${book.id}"></span> <br>
-      <strong>ISBN:</strong> <span th:text="${book.isbn}"></span> <br>
-      <strong>Title:</strong> <span th:text="${book.title}"></span> <br>
-      <strong>Author:</strong> <span th:text="${book.author}"></span> <br>
-      <strong>Publisher:</strong> <span th:text="${book.publisher}"></span> <br>
-      <strong>Description:</strong> <span th:text="${book.description}"></span> <br>
-      <strong>Price:</strong> $<span th:text="${book.price}"></span> <br>
-      <strong>Stock:</strong> <span th:text="${inventory.getQuantity(book.id)}"></span> <br>
-      <strong>Picture:</strong> <img th:src="${book.pictureUrl}" alt="Book Image" width="100"> <br>
+  <!-- Inventory List -->
+  <div th:each="inventory : ${inventoryList}" class="inventory-item" style="margin-bottom: 20px;">
+    <strong>Inventory ID:</strong> <span th:text="${inventory.id}"></span>
+    <!-- Iterate through books in each inventory -->
+    <div th:each="book : ${books}" class="book-item" style="display: flex; align-items: flex-start; margin-top: 10px; padding-bottom: 15px; border-bottom: 1px solid #ccc;">
+      <!-- Book Cover -->
+      <img th:src="${book != null and book.isbn != null ? '/covers/' + book.isbn + '.jpg' : '/covers/default.jpg'}"
+           alt="Book Image"
+           style="width: 120px; height: auto; border-radius: 4px; margin-right: 15px;">
+
+      <!-- Book Details -->
+      <div class="inventory-details" style="display: flex; flex-direction: column; gap: 8px;">
+        <div style="display: flex; gap: 5px;"><strong>Book ID:</strong> <span th:text="${book != null ? book.id : 'N/A'}"></span></div>
+        <div style="display: flex; gap: 5px;"><strong>ISBN:</strong> <span th:text="${book != null ? book.isbn : 'N/A'}"></span></div>
+        <div style="display: flex; gap: 5px;"><strong>Title:</strong> <span th:text="${book != null ? book.title : 'N/A'}"></span></div>
+        <div style="display: flex; gap: 5px;"><strong>Author:</strong> <span th:text="${book != null ? book.author : 'N/A'}"></span></div>
+        <div style="display: flex; gap: 5px;"><strong>Publisher:</strong> <span th:text="${book != null ? book.publisher : 'N/A'}"></span></div>
+        <div style="display: flex; gap: 5px;"><strong>Price:</strong> $<span th:text="${book != null ? book.price : 'N/A'}"></span></div>
+        <div style="display: flex; gap: 5px;"><strong>Stock:</strong> <span th:text="${inventory.getQuantity(book != null ? book.id : null)}"></span></div>
+        <div style="display: flex; gap: 5px;"><strong>Description:</strong> <span th:text="${book != null ? book.description : 'N/A'}"></span></div>
+      </div>
     </div>
   </div>
-</div>
-</div>
 
+</div>
 </body>
+
 </html>
