@@ -2,6 +2,8 @@ package com.group35.project.Book;
 import com.group35.project.Inventory.Inventory;
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 /***
  * Book class contains info about a book
  * @author chibuzo okpara v1
@@ -120,6 +122,18 @@ public class Book {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Book book = (Book) o;
+        return Objects.equals(isbn, book.isbn); // Compare based on ISBN
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(isbn); // Use ISBN for hash code
+    }
 
 
 }

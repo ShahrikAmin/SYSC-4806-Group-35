@@ -98,12 +98,12 @@ public class Inventory implements Serializable {
         return false;
     }
 
-    public boolean decreaseStock(Long bookId) {
-        if (stock.containsKey(bookId) && stock.get(bookId) > 0) {
-            stock.put(bookId, stock.get(bookId) - 1);
+    public boolean decreaseStock(Long bookId, int quantity) {
+        if (stock.containsKey(bookId) && stock.get(bookId) >= quantity) {
+            stock.put(bookId, stock.get(bookId) - quantity);
             return true;
         }
-        return false;
+        return false; // Not enough stock
     }
 
     public boolean increaseStock(Long bookId, int amount) {
