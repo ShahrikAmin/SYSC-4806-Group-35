@@ -2,6 +2,9 @@
 UML Class diagram:
 ![SYSC-4806-Group-35 UML](https://github.com/user-attachments/assets/f64c57d8-10ac-4d76-b24c-13ad8dd8b874)
 
+Database Schema:
+![Database_Schema](https://github.com/user-attachments/assets/533e6ed3-3d65-458f-9765-cb2a7caaa7df)
+
 
 # Bookstore Application - Milestone 3: Final Sprint Plan
 
